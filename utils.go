@@ -21,7 +21,6 @@ func main() {
 	if *get_ip == "internal" {
 		get_internal()
 	}
-
 }
 
 func get_external() {
