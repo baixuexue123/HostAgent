@@ -7,14 +7,24 @@ import (
 )
 
 func getJson(url string, target interface{}) error {
-	res, err := http.Get(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
 
-	// return json.NewDecoder(res.Body).Decode(target)
-	return json.Unmarshal(res.Body, target)
+	if resp.StatusCode != http.StatusOK {
+		resp.Body.Close()
+		return fmt.Errorf("search query failed: %s", resp.Status)
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(target); err != nil {
+		resp.Body.Close()
+		return err
+	}
+
+	resp.Body.Close()
+
+	return nil
 }
 
 type JsonData struct {
@@ -24,7 +34,7 @@ type JsonData struct {
 
 func main() {
 	foo1 := new(JsonData)
-	getJson("http://localhost:8888/json", foo1)
+	getJson("http://localhost:8888/string", foo1)
 	fmt.Println(foo1)
 
 	foo2 := JsonData{}
