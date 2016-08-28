@@ -31,7 +31,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("body: %s \n", content)
+	fmt.Printf("body: %s\n", content)
 
 	return
 }

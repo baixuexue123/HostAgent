@@ -30,7 +30,7 @@ func main() {
 	}
 	println(data1)
 	println(data1.Code)
-	fmt.Printf("msg: %v\n", data1.Msg)
+	fmt.Printf("msg: %s\n", data1.Msg)
 
 	data2 := JsonData{}
 	if err := getJson("http://localhost:8888/json", &data2); err != nil {
@@ -38,5 +38,5 @@ func main() {
 	}
 	fmt.Printf("%v\n", data2)
 	println(data2.Code)
-	fmt.Printf("msg: %v\n", data2.Msg)
+	fmt.Printf("msg: %s\n", data2.Msg)
 }
