@@ -1,8 +1,10 @@
 package main
 
-import "encoding/json"
-import "fmt"
-import "os"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 // bool     ->  JSON booleans
 // float64  ->  JSON numbers
@@ -22,7 +24,10 @@ type Response2 struct {
 
 func main() {
 
-	// 首先我们看一下将基础数据类型编码为JSON数据
+	//
+	// 基础数据类型编码为JSON数据
+	//
+
 	bolB, _ := json.Marshal(true)
 	fmt.Println(string(bolB))
 
@@ -35,11 +40,12 @@ func main() {
 	strB, _ := json.Marshal("gopher")
 	fmt.Println(string(strB))
 
-	// 将切片和字典编码为JSON数组或对象
+	// 切片
 	slcD := []string{"apple", "peach", "pear"}
 	slcB, _ := json.Marshal(slcD)
 	fmt.Println(string(slcB))
 
+	// 字典
 	mapD := map[string]int{"apple": 5, "lettuce": 7}
 	mapB, _ := json.Marshal(mapD)
 	fmt.Println(string(mapB))
@@ -53,14 +59,17 @@ func main() {
 	res1B, _ := json.Marshal(res1D)
 	fmt.Println(string(res1B))
 
-	// 你可以使用tag来自定义编码后JSON键的名称
+	// 可以使用tag来自定义编码后JSON键的名称
 	res2D := &Response2{
 		Page:   1,
 		Fruits: []string{"apple", "peach", "pear"}}
 	res2B, _ := json.Marshal(res2D)
 	fmt.Println(string(res2B))
 
-	// 现在我们看看解码JSON数据为Go数值
+	//
+	// 解码JSON数据为Go
+	//
+
 	byt := []byte(`{"num":6.13,"strs":["a","b"]}`)
 
 	// 我们需要提供一个变量来存储解码后的JSON数据，这里
@@ -68,7 +77,7 @@ func main() {
 	// 保存解码后的数据, Value可以为任意数据类型
 	var dat map[string]interface{}
 
-	// 解码过程，并检测相关可能存在的错误
+	// 解码并检测错误
 	if err := json.Unmarshal(byt, &dat); err != nil {
 		panic(err)
 	}
@@ -95,8 +104,21 @@ func main() {
 
 	// 上面的例子中，我们使用bytes和strings来进行原始数据和JSON数据
 	// 之间的转换，我们也可以直接将JSON编码的数据流写入`os.Writer`
-	// 或者是HTTP请求回复数据。
+	// 或者是HTTP请求回复数据.
 	enc := json.NewEncoder(os.Stdout)
 	d := map[string]int{"apple": 5, "lettuce": 7}
 	enc.Encode(d)
+
+	// 类型断言
+	switch v := i.(type) {
+	case int:
+		fmt.Println("twice i is", v*2)
+	case float64:
+		fmt.Println("the reciprocal of i is", 1/v)
+	case string:
+		h := len(v) / 2
+		fmt.Println("i swapped by halves is", v[h:]+v[:h])
+	default:
+		// i isn't one of the types above
+	}
 }
