@@ -22,8 +22,7 @@ type Response2 struct {
 	Fruits []string `json:"fruits"`
 }
 
-func main() {
-
+func baseToJson() {
 	//
 	// 基础数据类型编码为JSON数据
 	//
@@ -49,23 +48,30 @@ func main() {
 	mapD := map[string]int{"apple": 5, "lettuce": 7}
 	mapB, _ := json.Marshal(mapD)
 	fmt.Println(string(mapB))
+}
 
+func structToJson() {
 	// JSON包可以自动地编码自定义数据类型. 结果将只包括自定义
 	// 类型中的可导出成员的值并且默认情况下，这些成员名称都作
 	// 为JSON数据的键
+
 	res1D := &Response1{
 		Page:   1,
-		Fruits: []string{"apple", "peach", "pear"}}
+		Fruits: []string{"apple", "peach", "pear"},
+	}
 	res1B, _ := json.Marshal(res1D)
 	fmt.Println(string(res1B))
 
 	// 可以使用tag来自定义编码后JSON键的名称
 	res2D := &Response2{
 		Page:   1,
-		Fruits: []string{"apple", "peach", "pear"}}
+		Fruits: []string{"apple", "peach", "pear"},
+	}
 	res2B, _ := json.Marshal(res2D)
 	fmt.Println(string(res2B))
+}
 
+func jsonToGo() {
 	//
 	// 解码JSON数据为Go
 	//
@@ -81,26 +87,30 @@ func main() {
 	if err := json.Unmarshal(byt, &dat); err != nil {
 		panic(err)
 	}
-	fmt.Println(dat)
+	fmt.Printf("dat: %v\n", dat)
+	fmt.Println("dat:", dat)
 
 	// 为了使用解码后map里面的数据，我们需要将Value转换为
 	// 它们合适的类型，例如我们将这里的num转换为期望的float64
 	num := dat["num"].(float64)
-	fmt.Println(num)
+	fmt.Println("num:", num)
 
 	// 访问嵌套的数据需要一些类型转换
 	strs := dat["strs"].([]interface{})
 	str1 := strs[0].(string)
-	fmt.Println(str1)
+	fmt.Println("strs[0]", str1)
+	str2 := strs[1].(string)
+	fmt.Println("strs[1]", str2)
 
 	// 我们还可以将JSON解码为自定义数据类型，这有个好处是可以
 	// 为我们的程序增加额外的类型安全并且不用再在访问数据的时候
 	// 进行类型断言
 	str := `{"page": 1, "fruits": ["apple", "peach"]}`
-	res := &Response2{}
+	res := Response2{}
 	json.Unmarshal([]byte(str), &res)
 	fmt.Println(res)
-	fmt.Println(res.Fruits[0])
+	fmt.Println(res.Page)
+	fmt.Println(res.Fruits[0], res.Fruits[1])
 
 	// 上面的例子中，我们使用bytes和strings来进行原始数据和JSON数据
 	// 之间的转换，我们也可以直接将JSON编码的数据流写入`os.Writer`
@@ -109,6 +119,7 @@ func main() {
 	d := map[string]int{"apple": 5, "lettuce": 7}
 	enc.Encode(d)
 
+	var i interface{}
 	// 类型断言
 	switch v := i.(type) {
 	case int:
@@ -121,4 +132,8 @@ func main() {
 	default:
 		// i isn't one of the types above
 	}
+}
+
+func main() {
+	jsonToGo()
 }
