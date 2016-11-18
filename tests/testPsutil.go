@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 )
 
@@ -28,5 +29,9 @@ func testCpu() {
 }
 
 func main() {
-	testVirtualMemory()
+	n, _ := host.Info()
+	fmt.Printf("Platform : %v %v\n", n.Platform, n.PlatformVersion)
+	fmt.Printf("KernelVersion : %v\n", n.KernelVersion)
+	fmt.Printf("Hostname : %v\n", n.Hostname)
+	fmt.Printf("BootTime : %v\n", n.BootTime)
 }
