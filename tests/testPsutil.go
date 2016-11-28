@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 )
@@ -28,10 +29,19 @@ func testCpu() {
 	fmt.Println(info)
 }
 
-func main() {
+func testHostInfo() {
 	n, _ := host.Info()
 	fmt.Printf("Platform : %v %v\n", n.Platform, n.PlatformVersion)
 	fmt.Printf("KernelVersion : %v\n", n.KernelVersion)
 	fmt.Printf("Hostname : %v\n", n.Hostname)
 	fmt.Printf("BootTime : %v\n", n.BootTime)
+}
+
+func testDisk() {
+	d, _ := disk.Usage("/")
+	fmt.Printf("HD : %vGB Free : %vGB Usage : %f%%\n", d.Total/1024^3, d.Free/1024^3, d.UsedPercent)
+}
+
+func main() {
+	testDisk()
 }
