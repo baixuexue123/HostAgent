@@ -8,6 +8,34 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
+func testHostInfo() {
+	n, _ := host.Info()
+	fmt.Printf("Hostname : %v\n", n.Hostname)
+	fmt.Printf("Uptime : %v\n", n.Uptime)
+	fmt.Printf("BootTime : %v\n", n.BootTime)
+	fmt.Printf("Procs : %v\n", n.Procs)
+	fmt.Printf("OS : %s\n", n.OS)
+	fmt.Printf("Platform : %v\n", n.Platform)
+	fmt.Printf("PlatformFamily : %v\n", n.PlatformFamily)
+	fmt.Printf("PlatformVersion : %v\n", n.PlatformVersion)
+	fmt.Printf("KernelVersion : %v\n", n.KernelVersion)
+	fmt.Printf("VirtualizationSystem : %v\n", n.VirtualizationSystem)
+	fmt.Printf("VirtualizationRole : %v\n", n.VirtualizationRole)
+	fmt.Printf("HostID : %v\n", n.HostID)
+}
+
+func testUserStat() {
+	users, _ := host.Users()
+	fmt.Println(len(users))
+	for _, u := range users {
+		fmt.Println()
+		fmt.Printf("User : %s\n", u.User)
+		fmt.Printf("Terminal : %s\n", u.Terminal)
+		fmt.Printf("Host : %s\n", u.Host)
+		fmt.Printf("Started : %v\n", u.Started)
+	}
+}
+
 func testVirtualMemory() {
 	// func SwapMemory() (*SwapMemoryStat, error)
 	v1, _ := mem.VirtualMemory()
@@ -29,19 +57,14 @@ func testCpu() {
 	fmt.Println(info)
 }
 
-func testHostInfo() {
-	n, _ := host.Info()
-	fmt.Printf("Platform : %v %v\n", n.Platform, n.PlatformVersion)
-	fmt.Printf("KernelVersion : %v\n", n.KernelVersion)
-	fmt.Printf("Hostname : %v\n", n.Hostname)
-	fmt.Printf("BootTime : %v\n", n.BootTime)
-}
-
 func testDisk() {
 	d, _ := disk.Usage("/")
 	fmt.Printf("HD : %vGB Free : %vGB Usage : %f%%\n", d.Total/1024^3, d.Free/1024^3, d.UsedPercent)
 }
 
 func main() {
-	testDisk()
+	fmt.Println("*****************************************")
+	testHostInfo()
+	fmt.Println("*****************************************")
+	testUserStat()
 }
