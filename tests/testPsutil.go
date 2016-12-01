@@ -5,6 +5,7 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 	"time"
 )
@@ -83,17 +84,45 @@ func testCpuInfo() {
 	}
 }
 
-func testVirtualMemory() {
-	// func SwapMemory() (*SwapMemoryStat, error)
-	v1, _ := mem.VirtualMemory()
+func testLoadavg() {
+	loadavg, _ := load.Avg()
 
-	fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", v1.Total, v1.Free, v1.UsedPercent)
-	fmt.Println(v1)
+	fmt.Printf("Load1 : %v\n", loadavg.Load1)
+	fmt.Printf("Load5 : %v\n", loadavg.Load5)
+	fmt.Printf("Load15 : %v\n", loadavg.Load15)
+}
+
+func testMem() {
+	// func VirtualMemory() (*VirtualMemoryStat, error)
+	vm, _ := mem.VirtualMemory()
+
+	fmt.Println("------ VirtualMemory ------")
+	fmt.Printf("Total: %v\n", vm.Total)
+	fmt.Printf("Available: %v\n", vm.Available)
+	fmt.Printf("Used: %v\n", vm.Used)
+	fmt.Printf("UsedPercent: %f%%\n", vm.UsedPercent)
+	fmt.Printf("Free: %v\n", vm.Free)
+
+	fmt.Printf("Active: %v\n", vm.Active)
+	fmt.Printf("Inactive: %v\n", vm.Inactive)
+	fmt.Printf("Wired: %v\n", vm.Wired)
+
+	fmt.Printf("Buffers: %v\n", vm.Buffers)
+	fmt.Printf("Cached: %v\n", vm.Cached)
+	fmt.Printf("Writeback: %v\n", vm.Writeback)
+	fmt.Printf("Dirty: %v\n", vm.Dirty)
+	fmt.Printf("WritebackTmp: %v\n", vm.WritebackTmp)
 
 	// func SwapMemory() (*SwapMemoryStat, error)
-	v2, _ := mem.SwapMemory()
-	fmt.Printf("Total: %v, Free:%v, UsedPercent:%f%%\n", v2.Total, v2.Free, v2.UsedPercent)
-	fmt.Println(v2)
+	sm, _ := mem.SwapMemory()
+
+	fmt.Println("------ SwapMemory ------")
+	fmt.Printf("Total: %v\n", sm.Total)
+	fmt.Printf("Used: %v\n", sm.Used)
+	fmt.Printf("Free: %v\n", sm.Free)
+	fmt.Printf("UsedPercent: %f%%\n", sm.UsedPercent)
+	fmt.Printf("Sin: %v\n", sm.Sin)
+	fmt.Printf("Sout: %v\n", sm.Sout)
 }
 
 func testDisk() {
@@ -110,4 +139,10 @@ func main() {
 	testCpuTimesStat()
 	fmt.Println("*****************************************")
 	testCpuInfo()
+	fmt.Println("*****************************************")
+	testLoadavg()
+	fmt.Println("*****************************************")
+	testMem()
+	fmt.Println("*****************************************")
+	testDisk()
 }
