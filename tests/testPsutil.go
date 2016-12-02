@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
-	"time"
+	"github.com/shirou/gopsutil/net"
+
+	"../humanize"
 )
 
 func testHostInfo() {
@@ -126,23 +130,80 @@ func testMem() {
 }
 
 func testDisk() {
-	d, _ := disk.Usage("/")
-	fmt.Printf("HD : %vGB Free : %vGB Usage : %f%%\n", d.Total/1024^3, d.Free/1024^3, d.UsedPercent)
+	partitions, _ := disk.Partitions(false)
+
+	for _, p := range partitions {
+		fmt.Println()
+		fmt.Printf("Device: %s\n", p.Device)
+		fmt.Printf("Mountpoint: %s\n", p.Mountpoint)
+		fmt.Printf("Fstype: %s\n", p.Fstype)
+		fmt.Printf("Opts: %s\n", p.Opts)
+		fmt.Printf("SerialNumber: %s\n", disk.GetDiskSerialNumber(p.Device))
+
+		fmt.Println("------ UsageStat ------")
+		us, _ := disk.Usage(p.Mountpoint)
+		fmt.Printf("Path: %s\n", us.Path)
+		fmt.Printf("Fstype: %s\n", us.Fstype)
+		fmt.Printf("Total: %v\n", humanize.Bytes(us.Total))
+		fmt.Printf("Free: %v\n", humanize.Bytes(us.Free))
+		fmt.Printf("Used: %v\n", humanize.Bytes(us.Used))
+		fmt.Printf("UsedPercent: %f%%\n", us.UsedPercent)
+		fmt.Printf("InodesTotal: %v\n", us.InodesTotal)
+		fmt.Printf("InodesUsed: %v\n", us.InodesUsed)
+		fmt.Printf("InodesFree: %v\n", us.InodesFree)
+		fmt.Printf("InodesUsedPercent: %f%%\n", us.InodesUsedPercent)
+	}
+}
+
+func testInterfaces() {
+	interfaces, _ := net.Interfaces()
+
+	for _, i := range interfaces {
+		fmt.Println()
+		fmt.Printf("MTU: %v\n", i.MTU)
+		fmt.Printf("Name: %s\n", i.Name)
+		fmt.Printf("HardwareAddr: %s\n", i.HardwareAddr)
+		fmt.Printf("Flags: %s\n", i.Flags)
+		fmt.Printf("Addrs: %s\n", i.Addrs)
+	}
+}
+
+func testConnections() {
+	conns, _ := net.Connections("all")
+
+	for _, c := range conns {
+		fmt.Printf("Fd: %v\n", c.Fd)
+		fmt.Printf("Family: %v\n", c.Family)
+		fmt.Printf("Type: %v\n", c.Type)
+		fmt.Printf("Laddr: %v\n", c.Laddr)
+		fmt.Printf("Raddr: %v\n", c.Raddr)
+		fmt.Printf("Status: %s\n", c.Status)
+		fmt.Printf("Uids: %v\n", c.Uids)
+		fmt.Printf("Pid: %v\n", c.Pid)
+	}
+}
+
+func testProcess() {
+
 }
 
 func main() {
+	// fmt.Println("*****************************************")
+	// testHostInfo()
+	// fmt.Println("*****************************************")
+	// testUserStat()
+	// fmt.Println("*****************************************")
+	// testCpuTimesStat()
+	// fmt.Println("*****************************************")
+	// testCpuInfo()
+	// fmt.Println("*****************************************")
+	// testLoadavg()
+	// fmt.Println("*****************************************")
+	// testMem()
+	// fmt.Println("*****************************************")
+	// testDisk()
+	// fmt.Println("*****************************************")
+	// testInterfaces()
 	fmt.Println("*****************************************")
-	testHostInfo()
-	fmt.Println("*****************************************")
-	testUserStat()
-	fmt.Println("*****************************************")
-	testCpuTimesStat()
-	fmt.Println("*****************************************")
-	testCpuInfo()
-	fmt.Println("*****************************************")
-	testLoadavg()
-	fmt.Println("*****************************************")
-	testMem()
-	fmt.Println("*****************************************")
-	testDisk()
+	testConnections()
 }
