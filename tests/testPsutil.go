@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/shirou/gopsutil/cpu"
@@ -10,6 +11,7 @@ import (
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/process"
 
 	"../humanize"
 )
@@ -183,8 +185,45 @@ func testConnections() {
 	}
 }
 
-func testProcess() {
+type Process struct {
+	Pid    int32
+	Name   string
+	Status string
+}
 
+func ProcessList() ([]process.Process, error) {
+	pids, err := process.Pids()
+	if err != nil {
+		return nil, err
+	}
+	count := len(pids)
+	log.Printf("%v\n", count)
+
+	processes := make([]process.Process, count)
+
+	for _, pid := range pids {
+		p, err := process.NewProcess(pid)
+		if err != nil {
+			log.Printf("Pid: %v error\n", pid)
+			continue
+		}
+		ppid, _ := p.Ppid()
+		name, _ := p.Name()
+		exe, _ := p.Exe()
+		cmdline, _ := p.Cmdline()
+		ct, _ := p.CreateTime()
+		cwd, _ := p.Cwd()
+		uids, _ := p.Uids()
+		gids, _ := p.Gids()
+		terminal, _ := p.Terminal()
+		status, _ := p.Status()
+		numFds, _ := p.NumFDs()
+		numThreads, _ := p.NumThreads()
+
+		processes = append(processes, *p)
+	}
+	fmt.Printf("%v\n", processes)
+	return processes, nil
 }
 
 func main() {
@@ -204,6 +243,9 @@ func main() {
 	// testDisk()
 	// fmt.Println("*****************************************")
 	// testInterfaces()
+	// fmt.Println("*****************************************")
+	// testConnections()
 	fmt.Println("*****************************************")
-	testConnections()
+	ps, _ := ProcessList()
+	fmt.Println(ps)
 }
