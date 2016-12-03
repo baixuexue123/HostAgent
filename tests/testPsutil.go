@@ -186,12 +186,22 @@ func testConnections() {
 }
 
 type Process struct {
-	Pid    int32
-	Name   string
-	Status string
+	Pid        int32   `json:"pid"`
+	Name       string  `json: "name"`
+	Exe        string  `json: "exe"`
+	Cmdline    string  `json: "cmdline"`
+	Terminal   string  `json: "terminal"`
+	Status     string  `json: "status"`
+	Cwd        string  `json: "cwd"`
+	Ppid       int32   `json: "ppid"`
+	NumThreads int32   `josn: "numThreads"`
+	NumFDs     int32   `json: "numfds"`
+	Uids       []int32 `json: "uids"`
+	Gids       []int32 `json: "gids"`
+	CreateTime int64   `json: "createtime"`
 }
 
-func ProcessList() ([]process.Process, error) {
+func ProcessList() ([]Process, error) {
 	pids, err := process.Pids()
 	if err != nil {
 		return nil, err
@@ -199,7 +209,7 @@ func ProcessList() ([]process.Process, error) {
 	count := len(pids)
 	log.Printf("%v\n", count)
 
-	processes := make([]process.Process, count)
+	processes := make([]Process, 0, count)
 
 	for _, pid := range pids {
 		p, err := process.NewProcess(pid)
@@ -207,6 +217,7 @@ func ProcessList() ([]process.Process, error) {
 			log.Printf("Pid: %v error\n", pid)
 			continue
 		}
+
 		ppid, _ := p.Ppid()
 		name, _ := p.Name()
 		exe, _ := p.Exe()
@@ -220,9 +231,24 @@ func ProcessList() ([]process.Process, error) {
 		numFds, _ := p.NumFDs()
 		numThreads, _ := p.NumThreads()
 
-		processes = append(processes, *p)
+		proc := Process{
+			Pid:        p.Pid,
+			Name:       name,
+			Exe:        exe,
+			Cmdline:    cmdline,
+			Terminal:   terminal,
+			Status:     status,
+			Cwd:        cwd,
+			Ppid:       ppid,
+			NumThreads: numThreads,
+			NumFDs:     numFds,
+			Uids:       uids,
+			Gids:       gids,
+			CreateTime: ct,
+		}
+
+		processes = append(processes, proc)
 	}
-	fmt.Printf("%v\n", processes)
 	return processes, nil
 }
 
@@ -247,5 +273,7 @@ func main() {
 	// testConnections()
 	fmt.Println("*****************************************")
 	ps, _ := ProcessList()
-	fmt.Println(ps)
+	for _, p := range ps {
+		fmt.Printf("Pid: %v Name: %s Exe: %s Cmdline: %s\n", p.Pid, p.Name, p.Exe, p.Cmdline)
+	}
 }
