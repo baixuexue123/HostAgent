@@ -186,7 +186,7 @@ func testConnections() {
 }
 
 type Process struct {
-	Pid        int32   `json:"pid"`
+	Pid        int32   `json: "pid"`
 	Name       string  `json: "name"`
 	Exe        string  `json: "exe"`
 	Cmdline    string  `json: "cmdline"`
