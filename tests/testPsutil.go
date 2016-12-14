@@ -253,9 +253,9 @@ func ProcessList() ([]Process, error) {
 }
 
 func main() {
-	// fmt.Println("*****************************************")
-	// testHostInfo()
-	// fmt.Println("*****************************************")
+	fmt.Println("*****************************************")
+	testHostInfo()
+	fmt.Println("*****************************************")
 	// testUserStat()
 	// fmt.Println("*****************************************")
 	// testCpuTimesStat()
@@ -271,9 +271,9 @@ func main() {
 	// testInterfaces()
 	// fmt.Println("*****************************************")
 	// testConnections()
-	fmt.Println("*****************************************")
-	ps, _ := ProcessList()
-	for _, p := range ps {
-		fmt.Printf("Pid: %v Name: %s Exe: %s Cmdline: %s\n", p.Pid, p.Name, p.Exe, p.Cmdline)
-	}
+	// fmt.Println("*****************************************")
+	// ps, _ := ProcessList()
+	// for _, p := range ps {
+	// fmt.Printf("Pid: %v Name: %s Exe: %s Cmdline: %s\n", p.Pid, p.Name, p.Exe, p.Cmdline)
+	// }
 }
