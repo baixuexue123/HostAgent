@@ -34,13 +34,17 @@ func handler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	for k, v := range r.Form {
 		fmt.Fprintf(w, "Form[%q] = %q\n", k, v)
 	}
+	for k, v := range r.PostForm {
+		fmt.Fprintf(w, "PostForm[%q] = %q\n", k, v)
+	}
+
 	fmt.Fprintf(w, "Params: %v\n", ps)
 
 	content, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer r.Body.Close()
 	fmt.Fprintf(w, "body: %s\n", content)
 }
 
