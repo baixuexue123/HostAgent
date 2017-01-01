@@ -8,56 +8,68 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+var __version__ = "0.0.1"
+
 func main() {
 
-	http.HandleFunc("/api/list/", handler)
+	router := httprouter.New()
 
-	http.HandleFunc("/api/version/", counter)
+	router.GET("/api/version/", version)
 
-	http.HandleFunc("/api/help/", counter)
+	router.GET("/api/help/", help)
 
-	http.HandleFunc("/api/system/", counter)
+	router.GET("/api/list/", apiList)
 
-	http.HandleFunc("/api/now/", counter)
-	http.HandleFunc("/api/uptime/", counter)
+	router.GET("/api/system/", counter)
 
-	http.HandleFunc("/api/core/", counter)
-	http.HandleFunc("/api/load/", counter)
-	http.HandleFunc("/api/cpu/", counter)
-	http.HandleFunc("/api/percpu/", counter)
+	router.GET("/api/now/", counter)
+	router.GET("/api/uptime/", counter)
 
-	http.HandleFunc("/api/mem/", counter)
-	http.HandleFunc("/api/mem/used/", counter)
-	http.HandleFunc("/api/memswap/", counter)
+	router.GET("/api/core/", counter)
+	router.GET("/api/load/", counter)
+	router.GET("/api/cpu/", counter)
+	router.GET("/api/percpu/", counter)
 
-	http.HandleFunc("/api/processlist/", counter)
-	http.HandleFunc("/api/processlist/pid/", counter)
-	http.HandleFunc("/api/processlist/pid/:pid", counter)
-	http.HandleFunc("/api/processcount/", counter)
+	router.GET("/api/mem/", counter)
+	router.GET("/api/mem/used/", counter)
+	router.GET("/api/memswap/", counter)
 
-	http.HandleFunc("/api/network/", counter)
-	http.HandleFunc("/api/network/interfaces/", counter)
-	http.HandleFunc("/api/network/interface/:iface", counter)
+	router.GET("/api/processlist/", counter)
+	router.GET("/api/processlist/pid/", counter)
+	router.GET("/api/processlist/pid/:pid", counter)
+	router.GET("/api/processcount/", counter)
 
-	http.HandleFunc("/api/hddtemp/", counter)
+	router.GET("/api/network/", counter)
+	router.GET("/api/network/interfaces/", counter)
+	router.GET("/api/network/interface/:iface", counter)
 
-	http.HandleFunc("/api/diskio/", counter)
+	router.GET("/api/hddtemp/", counter)
 
-	http.HandleFunc("/api/fs/", counter)
+	router.GET("/api/diskio/", counter)
 
-	http.HandleFunc("/api/monitor/", counter)
+	router.GET("/api/fs/", counter)
 
-	http.HandleFunc("/api/quicklook/", counter)
+	router.GET("/api/quicklook/", counter)
 
-	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+	router.GET("/api/monitors/", counter)
+	router.GET("/api/monitors/:monitor", counter)
+	router.PUT("/api/monitors/:monitor", counter)
+
+	log.Fatal(http.ListenAndServe("0.0.0.0:9001", router))
 }
 
-// handler echoes the Path component of the requested URL.
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "URL.Path = %q\n", r.URL.Path)
+func version(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprintf(w, "%s", __version__)
 }
 
-// counter echoes the number of calls so far.
-func counter(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Count %d\n", 1000)
+func help(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprintf(w, "NodeAgent Help")
+}
+
+func apiList(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprintf(w, "NodeAgent ApiList")
+}
+
+func system(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	fmt.Fprintf(w, "system")
 }
