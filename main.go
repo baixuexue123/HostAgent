@@ -4,10 +4,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os/exec"
 	"time"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/load"
+	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/process"
 )
 
 const __version__ string = "NodeAgent 0.0.1"
@@ -24,6 +31,7 @@ func main() {
 	router.GET("/api/list/", apiList)
 
 	router.GET("/api/system/", system)
+	router.GET("/api/dmidecode/", dmidecode)
 
 	router.GET("/api/now/", now)
 	router.GET("/api/uptime/", uptime)
@@ -58,6 +66,7 @@ func main() {
 	router.GET("/api/monitors/:monitor", version)
 	router.PUT("/api/monitors/:monitor", version)
 
+	log.Println("0.0.0.0:9001")
 	log.Fatal(http.ListenAndServe("0.0.0.0:9001", router))
 }
 
@@ -75,6 +84,15 @@ func apiList(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func system(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprintf(w, "system")
+}
+
+func dmidecode(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	cmd := exec.Command("sudo", "dmidecode")
+	buf, err := cmd.Output()
+	if err != nil {
+		fmt.Fprintf(w, "The command failed to perform: %s", err)
+	}
+	fmt.Fprintf(w, "%s", buf)
 }
 
 func now(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
