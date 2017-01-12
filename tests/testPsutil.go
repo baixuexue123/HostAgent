@@ -254,14 +254,14 @@ func ProcessList() ([]Process, error) {
 
 func main() {
 	fmt.Println("*****************************************")
-	testHostInfo()
-	fmt.Println("*****************************************")
+	// testHostInfo()
+	// fmt.Println("*****************************************")
 	// testUserStat()
 	// fmt.Println("*****************************************")
 	// testCpuTimesStat()
 	// fmt.Println("*****************************************")
-	// testCpuInfo()
-	// fmt.Println("*****************************************")
+	testCpuInfo()
+	fmt.Println("*****************************************")
 	// testLoadavg()
 	// fmt.Println("*****************************************")
 	// testMem()

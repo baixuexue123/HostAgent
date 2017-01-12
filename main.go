@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,12 +10,12 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/disk"
+	// "github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/load"
-	"github.com/shirou/gopsutil/mem"
-	"github.com/shirou/gopsutil/net"
-	"github.com/shirou/gopsutil/process"
+	// "github.com/shirou/gopsutil/mem"
+	// "github.com/shirou/gopsutil/net"
+	// "github.com/shirou/gopsutil/process"
 )
 
 const __version__ string = "NodeAgent 0.0.1"
@@ -36,8 +37,8 @@ func main() {
 	router.GET("/api/now/", now)
 	router.GET("/api/uptime/", uptime)
 
-	router.GET("/api/core/", version)
-	router.GET("/api/load/", version)
+	router.GET("/api/core/", core)
+	router.GET("/api/load/", loadavg)
 	router.GET("/api/cpu/", version)
 	router.GET("/api/percpu/", version)
 
@@ -102,4 +103,17 @@ func now(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func uptime(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	info, _ := host.Info()
 	fmt.Fprintf(w, "%v", info.Uptime)
+}
+
+func core(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	log, _ := cpu.Counts(true) // logical
+	phys, _ := cpu.Counts(false)
+	mapD := map[string]int{"log": log, "phys": phys}
+	data, _ := json.Marshal(mapD)
+	fmt.Fprintf(w, "%s", data)
+}
+
+func loadavg(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	LoadData, _ := load.Avg()
+	fmt.Fprintf(w, "%s", LoadData.String())
 }

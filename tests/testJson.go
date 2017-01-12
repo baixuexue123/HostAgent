@@ -135,5 +135,5 @@ func jsonToGo() {
 }
 
 func main() {
-	jsonToGo()
+	baseToJson()
 }
