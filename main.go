@@ -13,7 +13,7 @@ import (
 	// "github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/load"
-	// "github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/mem"
 	// "github.com/shirou/gopsutil/net"
 	// "github.com/shirou/gopsutil/process"
 )
@@ -39,12 +39,12 @@ func main() {
 
 	router.GET("/api/core/", core)
 	router.GET("/api/load/", loadavg)
-	router.GET("/api/cpu/", version)
-	router.GET("/api/percpu/", version)
+	router.GET("/api/cpu/info/", cpuInfo)
+	router.GET("/api/cpu/times/", cpuTimes)
+	router.GET("/api/percpu/", percpu)
 
-	router.GET("/api/mem/", version)
-	router.GET("/api/mem/used/", version)
-	router.GET("/api/memswap/", version)
+	router.GET("/api/mem/", memVir)
+	router.GET("/api/memswap/", memSwap)
 
 	router.GET("/api/processlist/", version)
 	router.GET("/api/processlist/pid/", version)
@@ -114,6 +114,34 @@ func core(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 }
 
 func loadavg(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	LoadData, _ := load.Avg()
-	fmt.Fprintf(w, "%s", LoadData.String())
+	loadData, _ := load.Avg()
+	fmt.Fprintf(w, "%s", loadData.String())
+}
+
+func cpuInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	infoStat, _ := cpu.Info()
+	data, _ := json.Marshal(infoStat)
+	fmt.Fprintf(w, "%s", data)
+}
+
+func cpuTimes(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	timesStat, _ := cpu.Times(true)
+	data, _ := json.Marshal(timesStat)
+	fmt.Fprintf(w, "%s", data)
+}
+
+func percpu(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	percent, _ := cpu.Percent(1*time.Second, true)
+	data, _ := json.Marshal(percent)
+	fmt.Fprintf(w, "%s", data)
+}
+
+func memVir(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	vm, _ := mem.VirtualMemory()
+	fmt.Fprintf(w, "%s", vm.String())
+}
+
+func memSwap(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	sm, _ := mem.SwapMemory()
+	fmt.Fprintf(w, "%s", sm.String())
 }

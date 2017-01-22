@@ -47,6 +47,8 @@ func testUserStat() {
 func testCpuTimesStat() {
 	timesStat, _ := cpu.Times(true)
 
+	// fmt.Printf("TimesStat: %v", timesStat)
+
 	for _, stat := range timesStat {
 		fmt.Println()
 		fmt.Printf("Total : %v\n", stat.Total())
@@ -69,7 +71,7 @@ func testCpuInfo() {
 	count, _ := cpu.Counts(true) // logical
 	fmt.Printf("Cpu Counts: %v\n", count)
 
-	percent, _ := cpu.Percent(1*time.Second, true)
+	percent, _ := cpu.Percent(1*time.Second, false)
 	fmt.Printf("Cpu Percent: %v\n", percent)
 
 	infoStat, _ := cpu.Info()
@@ -258,10 +260,10 @@ func main() {
 	// fmt.Println("*****************************************")
 	// testUserStat()
 	// fmt.Println("*****************************************")
-	// testCpuTimesStat()
+	testCpuTimesStat()
 	// fmt.Println("*****************************************")
-	testCpuInfo()
-	fmt.Println("*****************************************")
+	// testCpuInfo()
+	// fmt.Println("*****************************************")
 	// testLoadavg()
 	// fmt.Println("*****************************************")
 	// testMem()
