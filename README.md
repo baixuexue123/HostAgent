@@ -1,2 +1,2 @@
 # NodeAgent
-Node service written in Python
+Node service written in Go
