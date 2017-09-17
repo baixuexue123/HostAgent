@@ -71,23 +71,23 @@ func main() {
 	log.Fatal(http.ListenAndServe("0.0.0.0:9001", router))
 }
 
-func version(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprintf(w, "%s", __version__)
+func version(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	fmt.Fprint(w, "%s", __version__)
 }
 
-func help(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprintf(w, "NodeAgent Help")
+func help(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	fmt.Fprint(w, "NodeAgent Help")
 }
 
-func apiList(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprintf(w, "NodeAgent ApiList")
+func apiList(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	fmt.Fprint(w, "NodeAgent ApiList")
 }
 
-func system(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	fmt.Fprintf(w, "system")
+func system(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	fmt.Fprint(w, "system")
 }
 
-func dmidecode(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func dmidecode(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	cmd := exec.Command("sudo", "dmidecode")
 	buf, err := cmd.Output()
 	if err != nil {
@@ -96,52 +96,52 @@ func dmidecode(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprintf(w, "%s", buf)
 }
 
-func now(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func now(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	fmt.Fprintf(w, "%s", time.Now().Format("2006-01-02 15:04:05"))
 }
 
-func uptime(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func uptime(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	info, _ := host.Info()
 	fmt.Fprintf(w, "%v", info.Uptime)
 }
 
-func core(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	log, _ := cpu.Counts(true) // logical
+func core(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	logical, _ := cpu.Counts(true)
 	phys, _ := cpu.Counts(false)
-	mapD := map[string]int{"log": log, "phys": phys}
+	mapD := map[string]int{"log": logical, "phys": phys}
 	data, _ := json.Marshal(mapD)
 	fmt.Fprintf(w, "%s", data)
 }
 
-func loadavg(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func loadavg(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	loadData, _ := load.Avg()
 	fmt.Fprintf(w, "%s", loadData.String())
 }
 
-func cpuInfo(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func cpuInfo(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	infoStat, _ := cpu.Info()
 	data, _ := json.Marshal(infoStat)
 	fmt.Fprintf(w, "%s", data)
 }
 
-func cpuTimes(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func cpuTimes(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	timesStat, _ := cpu.Times(true)
 	data, _ := json.Marshal(timesStat)
 	fmt.Fprintf(w, "%s", data)
 }
 
-func percpu(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func percpu(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	percent, _ := cpu.Percent(1*time.Second, true)
 	data, _ := json.Marshal(percent)
 	fmt.Fprintf(w, "%s", data)
 }
 
-func memVir(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func memVir(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	vm, _ := mem.VirtualMemory()
 	fmt.Fprintf(w, "%s", vm.String())
 }
 
-func memSwap(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func memSwap(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	sm, _ := mem.SwapMemory()
 	fmt.Fprintf(w, "%s", sm.String())
 }

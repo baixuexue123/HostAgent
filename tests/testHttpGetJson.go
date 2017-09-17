@@ -16,7 +16,6 @@ func getJson(url string, target interface{}) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
-		return err
 	}
 	defer resp.Body.Close()
 
@@ -28,8 +27,8 @@ func main() {
 	if err := getJson("http://localhost:8888/json", data1); err != nil {
 		log.Fatal(err)
 	}
-	println(data1)
-	println(data1.Code)
+	fmt.Println(data1)
+	fmt.Println(data1.Code)
 	fmt.Printf("msg: %s\n", data1.Msg)
 
 	data2 := JsonData{}
@@ -37,6 +36,6 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("%v\n", data2)
-	println(data2.Code)
+	fmt.Println(data2.Code)
 	fmt.Printf("msg: %s\n", data2.Msg)
 }
