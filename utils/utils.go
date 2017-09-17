@@ -1,5 +1,13 @@
 package utils
 
+import (
+	"fmt"
+)
+
+func init() {
+	fmt.Println("test")
+}
+
 // btoi returns 1 if b is true and 0 if false.
 func btoi(b bool) int {
 	if b {
@@ -28,13 +36,13 @@ func Contains(s, substr string) bool {
 	return false
 }
 
-func reverse(s []int) {
+func Reverse(s []int) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
 	}
 }
 
-func equal(x, y []string) bool {
+func Equal(x, y []string) bool {
 	if len(x) != len(y) {
 		return false
 	}
