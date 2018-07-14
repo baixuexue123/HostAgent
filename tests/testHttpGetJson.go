@@ -8,8 +8,8 @@ import (
 )
 
 type JsonData struct {
-	Code int    `json: "code"`
-	Msg  string `json: "msg"`
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 func getJson(url string, target interface{}) error {

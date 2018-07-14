@@ -16,7 +16,7 @@ func main() {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		fmt.Errorf("http failed: %s\n", resp.Status)
+		fmt.Printf("http failed: %s\n", resp.Status)
 		os.Exit(1)
 	} else {
 		fmt.Printf("http status: %s\n", resp.Status)

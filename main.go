@@ -18,7 +18,7 @@ import (
 	// "github.com/shirou/gopsutil/process"
 )
 
-const __version__ string = "NodeAgent 0.0.1"
+const Version = "NodeAgent 0.0.1"
 
 func main() {
 
@@ -68,11 +68,11 @@ func main() {
 	router.PUT("/api/monitors/:monitor", version)
 
 	log.Println("0.0.0.0:9001")
-	log.Fatal(http.ListenAndServe("0.0.0.0:9001", router))
+	log.Fatal(http.ListenAndServe(":9001", router))
 }
 
 func version(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	fmt.Fprint(w, "%s", __version__)
+	fmt.Fprint(w, Version)
 }
 
 func help(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {

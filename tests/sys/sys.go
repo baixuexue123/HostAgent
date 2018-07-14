@@ -113,17 +113,17 @@ func (stat *SysStat) parseStatLine(line string) error {
 		return err
 	}
 
-	cpu_tick := float64(100) // TODO: how to get _SC_CLK_TCK ?
+	cpuTick := float64(100) // TODO: how to get _SC_CLK_TCK ?
 
 	stat.CPU = cpu
-	stat.User = float64(user) / cpu_tick
-	stat.Nice = float64(nice) / cpu_tick
-	stat.System = float64(system) / cpu_tick
-	stat.Idle = float64(idle) / cpu_tick
-	stat.Iowait = float64(iowait) / cpu_tick
-	stat.Irq = float64(irq) / cpu_tick
-	stat.Softirq = float64(softirq) / cpu_tick
-	stat.Stolen = float64(stolen) / cpu_tick
+	stat.User = float64(user) / cpuTick
+	stat.Nice = float64(nice) / cpuTick
+	stat.System = float64(system) / cpuTick
+	stat.Idle = float64(idle) / cpuTick
+	stat.Iowait = float64(iowait) / cpuTick
+	stat.Irq = float64(irq) / cpuTick
+	stat.Softirq = float64(softirq) / cpuTick
+	stat.Stolen = float64(stolen) / cpuTick
 
 	if len(fields) > 9 { // Linux >= 2.6.11
 		steal, err := strconv.ParseFloat(fields[9], 64)

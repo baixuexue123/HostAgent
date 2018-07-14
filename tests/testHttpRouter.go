@@ -1,16 +1,49 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 )
 
+type Where struct {
+	Field []string `json:"field"`
+	Item  []string `json:"item"`
+}
+
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome!\n")
+
+	fmt.Println(r.RequestURI)
+
+	queryValues := r.URL.Query()
+
+	s := queryValues.Get("gran")
+	fmt.Printf("gran: %s", s)
+	s = queryValues.Get("select")
+	fmt.Printf("select: %s", s)
+
+	Select := make(map[string]Where)
+	if err := json.Unmarshal([]byte(s), &Select); err != nil {
+		fmt.Fprintf(w, "select: %v is not json", s)
+		return
+	}
+	for Type, where := range Select {
+		fmt.Println(Type)
+		fmt.Println(where)
+	}
+
+	_, err := strconv.Atoi(s)
+	if err != nil {
+		fmt.Fprintf(w, "gran: %v is not int", s)
+		return
+	}
+
 }
 
 func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {

@@ -188,19 +188,19 @@ func testConnections() {
 }
 
 type Process struct {
-	Pid        int32   `json: "pid"`
-	Name       string  `json: "name"`
-	Exe        string  `json: "exe"`
-	Cmdline    string  `json: "cmdline"`
-	Terminal   string  `json: "terminal"`
-	Status     string  `json: "status"`
-	Cwd        string  `json: "cwd"`
-	Ppid       int32   `json: "ppid"`
-	NumThreads int32   `josn: "numThreads"`
-	NumFDs     int32   `json: "numfds"`
-	Uids       []int32 `json: "uids"`
-	Gids       []int32 `json: "gids"`
-	CreateTime int64   `json: "createtime"`
+	Pid        int32   `json:"pid"`
+	Name       string  `json:"name"`
+	Exe        string  `json:"exe"`
+	Cmdline    string  `json:"cmdline"`
+	Terminal   string  `json:"terminal"`
+	Status     string  `json:"status"`
+	Cwd        string  `json:"cwd"`
+	Ppid       int32   `json:"ppid"`
+	NumThreads int32   `json:"numThreads"`
+	NumFDs     int32   `json:"numfds"`
+	Uids       []int32 `json:"uids"`
+	Gids       []int32 `json:"gids"`
+	CreateTime int64   `json:"createtime"`
 }
 
 func ProcessList() ([]Process, error) {
