@@ -1,2 +1,3 @@
-# NodeAgent
-Node service written in Go
+# HostAgent
+Host service written in Go
+Httpserver for gopsutil
