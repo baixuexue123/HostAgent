@@ -1,12 +1,4 @@
-package utils
-
-import (
-	"fmt"
-)
-
-func init() {
-	fmt.Println("test")
-}
+package main
 
 // btoi returns 1 if b is true and 0 if false.
 func btoi(b bool) int {
