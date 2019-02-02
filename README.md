@@ -1,3 +1,2 @@
 # HostAgent
-Host service written in Go
-Httpserver for gopsutil
+httpserver to gopsutil written in golang
