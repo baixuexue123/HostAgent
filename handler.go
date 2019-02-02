@@ -46,9 +46,9 @@ func (s *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	lrw := NewLoggingResponseWriter(w)
 	s.handler.ServeHTTP(lrw, r)
 	log.Printf(
-		"%s - %s : %s : %s : %d : %v",
+		"%s - %s  %s  %d  %v %s",
 		start, r.Method, r.URL.String(),
-		r.RemoteAddr, lrw.statusCode, time.Since(start),
+		lrw.statusCode, time.Since(start), r.RemoteAddr,
 	)
 }
 
@@ -81,30 +81,30 @@ func core(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 }
 
 func loadavg(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	loadData, _ := load.Avg()
-	s, _ := json.Marshal(loadData)
+	load, _ := load.Avg()
+	s, _ := json.Marshal(load)
 	fmt.Fprint(w, s)
 }
 
 func cpuInfo(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	infoStat, _ := cpu.Info()
-	s, _ := json.Marshal(infoStat)
+	info, _ := cpu.Info()
+	s, _ := json.Marshal(info)
 	fmt.Fprint(w, s)
 }
 
 func cpuTimes(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	timesStat, _ := cpu.Times(true)
-	s, _ := json.Marshal(timesStat)
+	ct, _ := cpu.Times(true)
+	s, _ := json.Marshal(ct)
 	fmt.Fprint(w, s)
 }
 
 func percpu(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
-	percent, _ := cpu.Percent(1*time.Second, true)
-	s, _ := json.Marshal(percent)
+	p, _ := cpu.Percent(1*time.Second, true)
+	s, _ := json.Marshal(p)
 	fmt.Fprint(w, s)
 }
 
-func memVir(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+func memVm(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	vm, _ := mem.VirtualMemory()
 	s, _ := json.Marshal(vm)
 	fmt.Fprint(w, s)
