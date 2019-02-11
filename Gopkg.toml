@@ -31,7 +31,11 @@
 
 [[constraint]]
   name = "github.com/shirou/gopsutil"
-  version = "2.18.12"
+  version = "2.19.01"
+
+[[constraint]]
+  name = "github.com/json-iterator/go"
+  version = "1.1.5"
 
 [prune]
   go-tests = true

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 )
 
 var Args struct {
@@ -19,6 +20,7 @@ func ParseCli() {
 func main() {
 	ParseCli()
 	s := NewHTTPServer(Args.Bind)
+	log.SetOutput(os.Stdout)
 	log.Println("HostAgent is started ", Args.Bind)
 	log.Fatal(s.ListenAndServe())
 }

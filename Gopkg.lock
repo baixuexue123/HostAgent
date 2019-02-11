@@ -53,10 +53,11 @@
   version = "1.0.1"
 
 [[projects]]
-  digest = "1:90d784f0ffa6b7f6e6707e059f8e9f99329b926f37ab1f7cedaa9e44ec86f94a"
+  digest = "1:52e4345e8592bcdf08663a7ff7168d49ec1b74e8f17b312a10d4aa5544b1bb22"
   name = "github.com/shirou/gopsutil"
   packages = [
     "cpu",
+    "disk",
     "host",
     "internal/common",
     "load",
@@ -94,9 +95,12 @@
     "github.com/json-iterator/go",
     "github.com/julienschmidt/httprouter",
     "github.com/shirou/gopsutil/cpu",
+    "github.com/shirou/gopsutil/disk",
     "github.com/shirou/gopsutil/host",
     "github.com/shirou/gopsutil/load",
     "github.com/shirou/gopsutil/mem",
+    "github.com/shirou/gopsutil/net",
+    "github.com/shirou/gopsutil/process",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
